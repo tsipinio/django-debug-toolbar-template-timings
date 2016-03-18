@@ -1,7 +1,7 @@
 from debug_toolbar.panels import Panel
 from django.conf import settings
 from django.template import base as template_base
-from django.template.base import Template, Library
+from django.template.base import Template
 from django.template.loader_tags import BlockNode
 from debug_toolbar.panels import sql
 from django.core.exceptions import ImproperlyConfigured
@@ -19,7 +19,7 @@ logger = logging.getLogger(__name__)
 FOUND_GENERIC_NODES = set()
 
 
-if not "debug_toolbar.panels.sql.SQLPanel" in settings.DEBUG_TOOLBAR_PANELS:
+if "debug_toolbar.panels.sql.SQLPanel" not in settings.DEBUG_TOOLBAR_PANELS:
     raise ImproperlyConfigured("debug_toolbar.panels.sql.SQLPanel must be present in DEBUG_TOOLBAR_PANELS")
 
 
@@ -43,8 +43,8 @@ def replace_method(klass, method_name):
 
 def record_query(**kwargs):
     if hasattr(results, "_current_template"):
-        if not results._current_key in results.timings or \
-                not results._current_template in results.timings[results._current_key]:
+        if results._current_key not in results.timings or \
+                results._current_template not in results.timings[results._current_key]:
             return
 
         part = results.timings[results._current_key][results._current_template]
